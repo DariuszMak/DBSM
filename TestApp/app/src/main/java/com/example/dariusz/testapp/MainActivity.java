@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
         toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
         toast.show();
-        
+
 
         editor.commit();
     }
