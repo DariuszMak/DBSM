@@ -1,6 +1,7 @@
 package com.example.dariusz.testapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -34,6 +35,18 @@ public class MessageActivity extends AppCompatActivity {
 
         rightMessage = sharedPreferences.getString("message", "");
         textView.setText(rightMessage);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        finish();
+    }
+
+    public void changePassword(View view) {
+        Intent intent = new Intent(this, ChangePasswordActivity.class);
+        startActivity(intent);
+        System.exit(0);
     }
 
     public void enterNewMessage(View view) {

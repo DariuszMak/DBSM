@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 
@@ -17,14 +18,17 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences.Editor editor;
     Context context;
     Toast toast;
+    EditText textField;
     String message = "";
+    String password = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        String password = "";
+        textField = (EditText) findViewById(R.id.editTextPassword);
+
         sharedPreferences = getSharedPreferences("com.example.dariusz.testapp", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
 
@@ -33,25 +37,40 @@ public class MainActivity extends AppCompatActivity {
 
         password = sharedPreferences.getString("password", "default");
 
-        Log.d("Password", password);
+//        Log.d("Password", password);
 
-        if (password == "default") {
-            Log.d("PasswordMessage", "Default password");
+        if (password.equals("default")) {
+//            Log.d("PasswordMessage", "Default password");
             message = "Hasło nie istnieje!";
+            toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
+            toast.show();
+            Intent intent = new Intent(this, ChangePasswordActivity.class);
+            startActivity(intent);
+            System.exit(0);
+
         } else {
-            Log.d("PasswordMessage", "Password OK");
+//            Log.d("PasswordMessage", "Password OK");
             message = "Hasło istnieje";
+            toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
+            toast.show();
         }
 
-        toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
-        toast.show();
 
-
-        editor.commit();
     }
 
+//    @Override
+//    public void onPause() {
+//        super.onPause();
+//        finish();
+//    }
+
     public void chceckPassword(View view) {
-        Intent intent = new Intent(this, MessageActivity.class);
-        startActivity(intent);
+        String tempPassword = textField.getText().toString();
+        if (password.equals(tempPassword)) {
+            Intent intent = new Intent(this, MessageActivity.class);
+            startActivity(intent);
+            System.exit(0);
+        }
+
     }
 }
