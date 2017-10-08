@@ -50,8 +50,7 @@ public class MainActivity extends AppCompatActivity {
         editor.commit();
     }
 
-    public void chceckPassword (View view)
-    {
+    public void chceckPassword(View view) {
         Intent intent = new Intent(this, MessageActivity.class);
         startActivity(intent);
     }
