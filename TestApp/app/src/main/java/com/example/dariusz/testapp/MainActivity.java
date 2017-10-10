@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
             toast.show();
             Intent intent = new Intent(this, ChangePasswordActivity.class);
             startActivity(intent);
-            System.exit(0);
+            //System.exit(0);
 
         } else {
 //            Log.d("PasswordMessage", "Password OK");

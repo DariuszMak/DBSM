@@ -31,8 +31,12 @@ public class ChangePasswordActivity extends AppCompatActivity {
         editor = sharedPreferences.edit();
 
         context = getApplicationContext();
+    }
 
-
+    @Override
+    public void onPause() {
+        super.onPause();
+        finish();
     }
 
     public void changePassword(View view) {
@@ -45,7 +49,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
             editor.commit();
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
-            System.exit(0);
+            //System.exit(0);
         } else {
             Toast.makeText(this, "Invalid password!", Toast.LENGTH_SHORT).show();
         }
