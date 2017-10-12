@@ -12,29 +12,39 @@
         android:id="@+id/textViewRightMessage"
         android:layout_width="368dp"
         android:layout_height="128dp"
-        android:layout_marginTop="89dp"
-        android:text="TextView"
-        android:textAlignment="center"></TextView>
+        android:layout_marginTop="38dp"
+        android:text="Wiadomość"
+        android:textAlignment="center"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"></TextView>
 
     <EditText
         android:id="@+id/editTextRightMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="160dp"
         android:ems="10"
-        android:inputType="textPersonName"></EditText>
+        android:inputType="textPersonName"
+        android:layout_below="@+id/textViewRightMessage"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="34dp"></EditText>
 
     <Button
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="enterNewMessage"
-        android:text="Wprowadź wiadomość"></Button>
+        android:text="Wprowadź wiadomość"
+        android:layout_below="@+id/textViewRightMessage"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="92dp"></Button>
 
     <Button
         android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="changePassword"
-        android:text="Zmień hasło"></Button>
+        android:text="Zmień hasło"
+        android:layout_below="@+id/button"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="52dp"></Button>
 </RelativeLayout>
