@@ -17,7 +17,6 @@ public class ChangePasswordActivity extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
     Context context;
-    Toast toast;
     EditText textField;
     MD5 md5;
 
@@ -47,14 +46,16 @@ public class ChangePasswordActivity extends AppCompatActivity {
         String tempNewPassword = textField.getText().toString().trim();
 
         if (isValidPassword(tempNewPassword)) {
-            Toast.makeText(this, "Password changed", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Password OK!", Toast.LENGTH_SHORT).show();
+
+            Toast.makeText(context, "Password changed", Toast.LENGTH_SHORT).show();
             editor.putString("password", md5.createHash(tempNewPassword));
             editor.commit();
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             //System.exit(0);
         } else {
-            Toast.makeText(this, "Invalid password!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Invalid password!", Toast.LENGTH_SHORT).show();
         }
 
     }

@@ -20,7 +20,6 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
     Context context;
-    Toast toast;
     EditText textField;
     String message = "";
     String password = "";
@@ -50,8 +49,7 @@ public class MainActivity extends AppCompatActivity {
         if (password.equals("default")) {
 //            Log.d("PasswordMessage", "Default password");
             message = "Hasło nie istnieje!";
-            toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
-            toast.show();
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(this, ChangePasswordActivity.class);
             startActivity(intent);
             //System.exit(0);
@@ -59,8 +57,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
 //            Log.d("PasswordMessage", "Password OK");
             message = "Hasło istnieje";
-            toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
-            toast.show();
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
         }
 
 //        Log.d("Hash", md5.createHash("Hasło"));
@@ -76,9 +73,12 @@ public class MainActivity extends AppCompatActivity {
     public void chceckPassword(View view) {
         String tempPassword = textField.getText().toString();
         if (password.equals(md5.createHash(tempPassword))) {
+            Toast.makeText(context, "Hasło poprawne!", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(this, MessageActivity.class);
             startActivity(intent);
             System.exit(0);
+        } else {
+            Toast.makeText(context, "Hasło niepoprawne!\nSpróbuj ponownie", Toast.LENGTH_SHORT).show();
         }
 
     }

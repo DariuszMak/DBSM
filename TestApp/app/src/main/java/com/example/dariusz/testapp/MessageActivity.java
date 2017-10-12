@@ -16,7 +16,6 @@ public class MessageActivity extends AppCompatActivity {
     Context context;
     EditText textField;
     TextView textView;
-    Toast toast;
     String rightMessage = "";
 
     @Override
@@ -31,7 +30,6 @@ public class MessageActivity extends AppCompatActivity {
         editor = sharedPreferences.edit();
 
         context = getApplicationContext();
-
 
         rightMessage = sharedPreferences.getString("message", "");
         textView.setText(rightMessage);
@@ -50,13 +48,14 @@ public class MessageActivity extends AppCompatActivity {
     }
 
     public void enterNewMessage(View view) {
-
         String messageTemp = textField.getText().toString();
 
         editor.putString("message", messageTemp);
         editor.commit();
         rightMessage = sharedPreferences.getString("message", "");
         textView.setText(rightMessage);
+
+        Toast.makeText(context, "Wiadomość zapisana", Toast.LENGTH_SHORT).show();
 
     }
 }
