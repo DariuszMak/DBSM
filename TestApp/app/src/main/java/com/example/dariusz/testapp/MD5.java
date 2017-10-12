@@ -3,10 +3,6 @@ package com.example.dariusz.testapp;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-/**
- * Created by Dariusz on 10/12/2017.
- */
-
 public class MD5 {
 
 

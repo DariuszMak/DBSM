@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 public class MessageActivity extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
@@ -17,11 +18,16 @@ public class MessageActivity extends AppCompatActivity {
     EditText textField;
     TextView textView;
     String rightMessage = "";
+    AES aes;
+    String key = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
+
+        aes = new AES();
+        key = "3507083389850741517214755132696897332499";
 
         textField = (EditText) findViewById(R.id.editTextRightMessage);
         textView = (TextView) findViewById(R.id.textViewRightMessage);
@@ -31,8 +37,11 @@ public class MessageActivity extends AppCompatActivity {
 
         context = getApplicationContext();
 
-        rightMessage = sharedPreferences.getString("message", "");
+
+        rightMessage = aes.decrypt(sharedPreferences.getString("message", ""), key);
         textView.setText(rightMessage);
+
+
     }
 
     @Override
@@ -48,11 +57,11 @@ public class MessageActivity extends AppCompatActivity {
     }
 
     public void enterNewMessage(View view) {
-        String messageTemp = textField.getText().toString();
+        String messageTemp = aes.encrypt(textField.getText().toString(), key);
 
         editor.putString("message", messageTemp);
         editor.commit();
-        rightMessage = sharedPreferences.getString("message", "");
+        rightMessage = aes.decrypt(sharedPreferences.getString("message", ""), key);
         textView.setText(rightMessage);
 
         Toast.makeText(context, "Wiadomość zapisana", Toast.LENGTH_SHORT).show();
