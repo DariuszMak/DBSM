@@ -12,6 +12,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 
 public class MainActivity extends AppCompatActivity {
     SharedPreferences sharedPreferences;
@@ -21,16 +24,21 @@ public class MainActivity extends AppCompatActivity {
     EditText textField;
     String message = "";
     String password = "";
+    MD5 md5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        md5 = new MD5();
+
         textField = (EditText) findViewById(R.id.editTextPassword);
 
         sharedPreferences = getSharedPreferences("com.example.dariusz.testapp", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
+//        editor.clear();
+//        editor.commit();
 
         context = getApplicationContext();
 
@@ -55,22 +63,27 @@ public class MainActivity extends AppCompatActivity {
             toast.show();
         }
 
+//        Log.d("Hash", md5.createHash("Hasło"));
 
     }
 
-//    @Override
-//    public void onPause() {
-//        super.onPause();
-//        finish();
-//    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        finish();
+    }
 
     public void chceckPassword(View view) {
         String tempPassword = textField.getText().toString();
-        if (password.equals(tempPassword)) {
+        if (password.equals(md5.createHash(tempPassword))) {
             Intent intent = new Intent(this, MessageActivity.class);
             startActivity(intent);
             System.exit(0);
         }
 
     }
+
+
 }
+
+

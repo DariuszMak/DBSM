@@ -19,11 +19,14 @@ public class ChangePasswordActivity extends AppCompatActivity {
     Context context;
     Toast toast;
     EditText textField;
+    MD5 md5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_password);
+
+        md5 = new MD5();
 
         textField = (EditText) findViewById(R.id.editTextChangePassword);
 
@@ -45,7 +48,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
 
         if (isValidPassword(tempNewPassword)) {
             Toast.makeText(this, "Password changed", Toast.LENGTH_SHORT).show();
-            editor.putString("password", tempNewPassword);
+            editor.putString("password", md5.createHash(tempNewPassword));
             editor.commit();
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
