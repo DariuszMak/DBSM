@@ -27,7 +27,6 @@ public class MessageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_message);
 
         aes = new AES();
-        key = "3507083389850741517214755132696897332499";
 
         textField = (EditText) findViewById(R.id.editTextRightMessage);
         textView = (TextView) findViewById(R.id.textViewRightMessage);
@@ -37,11 +36,10 @@ public class MessageActivity extends AppCompatActivity {
 
         context = getApplicationContext();
 
+        key = sharedPreferences.getString("password", "default");
 
         rightMessage = aes.decrypt(sharedPreferences.getString("message", ""), key);
         textView.setText(rightMessage);
-
-
     }
 
     @Override
@@ -64,7 +62,7 @@ public class MessageActivity extends AppCompatActivity {
         rightMessage = aes.decrypt(sharedPreferences.getString("message", ""), key);
         textView.setText(rightMessage);
 
-        Toast.makeText(context, "Wiadomość zapisana", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "Wiadomość zapisana",   Toast.LENGTH_SHORT).show();
 
     }
 }
