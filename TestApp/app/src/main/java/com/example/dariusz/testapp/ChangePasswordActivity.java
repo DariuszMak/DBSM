@@ -18,8 +18,10 @@ public class ChangePasswordActivity extends AppCompatActivity {
     SharedPreferences.Editor editor;
     Context context;
     EditText textField;
+    EditText textField2;
     MD5 md5;
     AES aes;
+    String password = "";
 
 
     @Override
@@ -31,8 +33,10 @@ public class ChangePasswordActivity extends AppCompatActivity {
         aes = new AES();
 
         textField = (EditText) findViewById(R.id.editTextChangePassword);
+        textField2 = (EditText) findViewById(R.id.editTextChangePassword2);
 
         sharedPreferences = getSharedPreferences("com.example.dariusz.testapp", Context.MODE_PRIVATE);
+        password = sharedPreferences.getString("password", "default");
         editor = sharedPreferences.edit();
 
         context = getApplicationContext();
@@ -47,26 +51,31 @@ public class ChangePasswordActivity extends AppCompatActivity {
     public void changePassword(View view) {
         Log.d("method called", "changerPassword");
         String tempNewPassword = textField.getText().toString().trim();
+        String tempNewPassword2 = textField2.getText().toString().trim();
 
+        if (tempNewPassword.equals(tempNewPassword2)) {
 
-        if (isValidPassword(tempNewPassword)) {
-            Toast.makeText(context, "Password OK!", Toast.LENGTH_SHORT).show();
-            String key = sharedPreferences.getString("password", "default");
-            String rightMessage = aes.decrypt(sharedPreferences.getString("message", ""), key);
-            String passHash = md5.createHash(tempNewPassword);
-            String encryptedMessage = aes.encrypt(rightMessage, passHash);
-            editor.putString("password", passHash);
+            if (isValidPassword(tempNewPassword) && !password.equals(md5.createHash(tempNewPassword))) {
+                Toast.makeText(context, "Password OK!", Toast.LENGTH_SHORT).show();
+                String key = sharedPreferences.getString("password", "default");
+                String rightMessage = aes.decrypt(sharedPreferences.getString("message", ""), key);
+                String passHash = md5.createHash(tempNewPassword);
+                String encryptedMessage = aes.encrypt(rightMessage, passHash);
+                editor.putString("password", passHash);
 
-            editor.putString("message", encryptedMessage);
+                editor.putString("message", encryptedMessage);
 
-            editor.commit();
+                editor.commit();
 
-            Toast.makeText(context, "Password changed", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-            //System.exit(0);
+                Toast.makeText(context, "Password changed", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this, MessageActivity.class);
+                startActivity(intent);
+                //System.exit(0);
+            } else {
+                Toast.makeText(context, "Invalid password!", Toast.LENGTH_SHORT).show();
+            }
         } else {
-            Toast.makeText(context, "Invalid password!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Check password!", Toast.LENGTH_SHORT).show();
         }
 
     }
