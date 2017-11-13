@@ -85,7 +85,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
         Pattern pattern;
         Matcher matcher;
 
-        final String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{6,}$";
+        final String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{10,}$";
 
 //        ^       # start-of-string
 //                (?=.*[0-9])       # a digit must occur at least once
