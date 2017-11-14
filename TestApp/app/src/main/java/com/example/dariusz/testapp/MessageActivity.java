@@ -20,6 +20,7 @@ public class MessageActivity extends AppCompatActivity {
     String rightMessage = "";
     AES aes;
     String key = "";
+    String salt = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +39,9 @@ public class MessageActivity extends AppCompatActivity {
 
         key = sharedPreferences.getString("password", "default");
 
-        rightMessage = aes.decrypt(sharedPreferences.getString("message", ""), key);
+        salt = sharedPreferences.getString("salt", "default");
+
+        rightMessage = aes.decrypt(sharedPreferences.getString("message", ""), key, salt);
         textView.setText(rightMessage);
     }
 
@@ -55,14 +58,14 @@ public class MessageActivity extends AppCompatActivity {
     }
 
     public void enterNewMessage(View view) {
-        String messageTemp = aes.encrypt(textField.getText().toString(), key);
+        String messageTemp = aes.encrypt(textField.getText().toString(), key, salt);
 
         editor.putString("message", messageTemp);
         editor.commit();
-        rightMessage = aes.decrypt(sharedPreferences.getString("message", ""), key);
+        rightMessage = aes.decrypt(sharedPreferences.getString("message", ""), key, salt);
         textView.setText(rightMessage);
 
-        Toast.makeText(context, "Wiadomość zapisana",   Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "Wiadomość zapisana", Toast.LENGTH_SHORT).show();
 
     }
 }

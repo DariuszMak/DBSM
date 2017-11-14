@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.nio.charset.StandardCharsets;
+import java.security.SecureRandom;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -58,11 +60,22 @@ public class ChangePasswordActivity extends AppCompatActivity {
             if (isValidPassword(tempNewPassword) && !password.equals(md5.createHash(tempNewPassword))) {
                 Toast.makeText(context, "Password OK!", Toast.LENGTH_SHORT).show();
                 String key = sharedPreferences.getString("password", "default");
-                String rightMessage = aes.decrypt(sharedPreferences.getString("message", ""), key);
-                String passHash = md5.createHash(tempNewPassword);
-                String encryptedMessage = aes.encrypt(rightMessage, passHash);
-                editor.putString("password", passHash);
+                String salt = sharedPreferences.getString("salt", "default");
 
+
+                String rightMessage = aes.decrypt(sharedPreferences.getString("message", ""), key, salt);
+
+                String passHash = md5.createHash(tempNewPassword);
+
+                SecureRandom random = new SecureRandom();
+                byte bytes[] = new byte[20];
+                random.nextBytes(bytes);
+                salt = new String(bytes, StandardCharsets.UTF_8);
+
+                String encryptedMessage = aes.encrypt(rightMessage, passHash, salt);
+
+                editor.putString("password", passHash);
+                editor.putString("salt", salt);
                 editor.putString("message", encryptedMessage);
 
                 editor.commit();
