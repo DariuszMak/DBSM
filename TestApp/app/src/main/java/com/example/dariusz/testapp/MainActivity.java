@@ -75,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
         if (password.equals(md5.createHash(tempPassword))) {
             Toast.makeText(context, "Hasło poprawne!", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(this, MessageActivity.class);
+            intent.putExtra("Password", tempPassword);
             startActivity(intent);
             System.exit(0);
         } else {

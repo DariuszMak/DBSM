@@ -17,6 +17,7 @@ public class MessageActivity extends AppCompatActivity {
     Context context;
     EditText textField;
     TextView textView;
+    String password = "";
     String rightMessage = "";
     AES aes;
     String key = "";
@@ -26,7 +27,8 @@ public class MessageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
-
+        Intent I = getIntent();
+        password = I.getStringExtra("Password");
         aes = new AES();
 
         textField = (EditText) findViewById(R.id.editTextRightMessage);
@@ -41,7 +43,7 @@ public class MessageActivity extends AppCompatActivity {
 
         salt = sharedPreferences.getString("salt", "default");
 
-        rightMessage = aes.decrypt(sharedPreferences.getString("message", ""), key, salt);
+        rightMessage = aes.decrypt(sharedPreferences.getString("message", ""), password, salt);
         textView.setText(rightMessage);
     }
 
@@ -53,16 +55,17 @@ public class MessageActivity extends AppCompatActivity {
 
     public void changePassword(View view) {
         Intent intent = new Intent(this, ChangePasswordActivity.class);
+        intent.putExtra("Password", password);
         startActivity(intent);
         //System.exit(0);
     }
 
     public void enterNewMessage(View view) {
-        String messageTemp = aes.encrypt(textField.getText().toString(), key, salt);
+        String messageTemp = aes.encrypt(textField.getText().toString(), password, salt);
 
         editor.putString("message", messageTemp);
         editor.commit();
-        rightMessage = aes.decrypt(sharedPreferences.getString("message", ""), key, salt);
+        rightMessage = aes.decrypt(sharedPreferences.getString("message", ""), password, salt);
         textView.setText(rightMessage);
 
         Toast.makeText(context, "Wiadomość zapisana", Toast.LENGTH_SHORT).show();

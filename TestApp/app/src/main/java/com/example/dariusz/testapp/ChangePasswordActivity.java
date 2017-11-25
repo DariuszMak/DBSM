@@ -24,12 +24,16 @@ public class ChangePasswordActivity extends AppCompatActivity {
     MD5 md5;
     AES aes;
     String password = "";
+    String rightPassword = "";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_password);
+
+        Intent I = getIntent();
+        rightPassword = I.getStringExtra("Password");
 
         md5 = new MD5();
         aes = new AES();
@@ -63,7 +67,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
                 String salt = sharedPreferences.getString("salt", "default");
 
 
-                String rightMessage = aes.decrypt(sharedPreferences.getString("message", ""), key, salt);
+                String rightMessage = aes.decrypt(sharedPreferences.getString("message", ""), rightPassword, salt);
 
                 String passHash = md5.createHash(tempNewPassword);
 
@@ -72,7 +76,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
                 random.nextBytes(bytes);
                 salt = new String(bytes, StandardCharsets.UTF_8);
 
-                String encryptedMessage = aes.encrypt(rightMessage, passHash, salt);
+                String encryptedMessage = aes.encrypt(rightMessage, tempNewPassword, salt);
 
                 editor.putString("password", passHash);
                 editor.putString("salt", salt);
@@ -82,6 +86,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
 
                 Toast.makeText(context, "Password changed", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(this, MessageActivity.class);
+                intent.putExtra("Password", tempNewPassword);
                 startActivity(intent);
                 //System.exit(0);
             } else {
