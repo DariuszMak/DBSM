@@ -32,7 +32,7 @@
                 android:id="@+id/buttonEnterPassword"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="chceckPassword"
+                android:onClick="checkPassword"
                 android:text="OK" />
 
         </LinearLayout>

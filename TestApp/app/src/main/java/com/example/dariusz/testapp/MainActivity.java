@@ -53,7 +53,9 @@ public class MainActivity extends AppCompatActivity {
     static final String KEY_NAME = "example_key";
     Cipher cipher;
     private FingerprintManager.CryptoObject cryptoObject;
+    boolean passwordExists;
 
+    FingerprintHandler helper = null;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -61,17 +63,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        passwordExists = false;
+
         md5 = new MD5();
 
         textField = (EditText) findViewById(R.id.editTextPassword);
 
         sharedPreferences = getSharedPreferences("com.example.dariusz.testapp", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
+
 //        editor.clear();
 //        editor.commit();
 
         context = getApplicationContext();
-
 
         password = sharedPreferences.getString("password", "default");
 
@@ -80,14 +84,16 @@ public class MainActivity extends AppCompatActivity {
         if (password.equals("default")) {
 //            Log.d("PasswordMessage", "Default password");
             message = "Hasło nie istnieje!";
+            passwordExists = false;
             Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(this, ChangePasswordActivity.class);
             startActivity(intent);
-            //System.exit(0);
+            System.exit(0);
 
         } else {
 //            Log.d("PasswordMessage", "Password OK");
             message = "Hasło istnieje";
+            passwordExists = true;
             Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
         }
 
@@ -121,21 +127,16 @@ public class MainActivity extends AppCompatActivity {
                     "Register at least one fingerprint in Settings",
                     Toast.LENGTH_LONG).show();
             return;
+        } else {
+            generateKey();
+
+            if (cipherInit()) {
+                cryptoObject = new FingerprintManager.CryptoObject(cipher);
+                helper = new FingerprintHandler(this);
+                helper.startAuth(fingerprintManager, cryptoObject);
+            }
+
         }
-
-        generateKey();
-
-        if (cipherInit()) {
-            cryptoObject =
-                    new FingerprintManager.CryptoObject(cipher);
-        }
-
-        if (cipherInit()) {
-            cryptoObject = new FingerprintManager.CryptoObject(cipher);
-            FingerprintHandler helper = new FingerprintHandler(this);
-            helper.startAuth(fingerprintManager, cryptoObject);
-        }
-
 
     }
 
@@ -215,12 +216,13 @@ public class MainActivity extends AppCompatActivity {
         finish();
     }
 
-    public void chceckPassword(View view) {
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public void checkPassword(View view) {
         String tempPassword = textField.getText().toString();
-        if (password.equals(md5.createHash(tempPassword))) {
+        if ((password.equals(md5.createHash(tempPassword)) || helper.isOk) && passwordExists) {
             Toast.makeText(context, "Hasło poprawne!", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(this, MessageActivity.class);
-            intent.putExtra("Password", tempPassword);
+            intent.putExtra("Password", password);
             startActivity(intent);
             System.exit(0);
         } else {
@@ -231,5 +233,3 @@ public class MainActivity extends AppCompatActivity {
 
 
 }
-
-

@@ -19,9 +19,11 @@ public class FingerprintHandler extends
         FingerprintManager.AuthenticationCallback {
     private CancellationSignal cancellationSignal;
     private Context appContext;
+    public boolean isOk;
 
     public FingerprintHandler(Context context) {
         appContext = context;
+        isOk = false;
     }
 
     public void startAuth(FingerprintManager manager,
@@ -67,5 +69,8 @@ public class FingerprintHandler extends
         Toast.makeText(appContext,
                 "Authentication succeeded.",
                 Toast.LENGTH_LONG).show();
+        isOk = true;
+        MainActivity activity = (MainActivity) appContext;
+        activity.checkPassword(null);
     }
 }
