@@ -219,10 +219,10 @@ public class MainActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void checkPassword(View view) {
         String tempPassword = textField.getText().toString();
-        if ((password.equals(md5.createHash(tempPassword)) || helper.isOk) && passwordExists) {
+        if ((password.equals(md5.createHash(tempPassword)) && helper.isOk) && passwordExists) {
             Toast.makeText(context, "Hasło poprawne!", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(this, MessageActivity.class);
-            intent.putExtra("Password", password);
+            intent.putExtra("Password", tempPassword);
             startActivity(intent);
             System.exit(0);
         } else {

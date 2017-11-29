@@ -57,7 +57,7 @@ public class MessageActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ChangePasswordActivity.class);
         intent.putExtra("Password", password);
         startActivity(intent);
-        //System.exit(0);
+        System.exit(0);
     }
 
     public void enterNewMessage(View view) {
