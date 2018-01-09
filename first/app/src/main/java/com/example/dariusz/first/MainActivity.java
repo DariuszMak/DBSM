@@ -32,8 +32,8 @@ public class MainActivity extends AppCompatActivity {
 
     HashMap<String, List<String>> allContacts = new HashMap<>();
 
-    private boolean shouldAskPermission(){
-        return(Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1);
+    private boolean shouldAskPermission() {
+        return (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1);
     }
 
     @TargetApi(23)
@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
             String key = (String) key1;
             List<String> value = allContacts.get(key);
             contacts.append(key + " : ");
-            for (int i=0; i< value.size(); i++){
+            for (int i = 0; i < value.size(); i++) {
                 contacts.append(value.get(i) + ", ");
             }
             contacts.append(System.getProperty("line.separator"));
@@ -109,13 +109,10 @@ public class MainActivity extends AppCompatActivity {
 
         getPackages();
 
-        Intent launchIntent = getPackageManager().getLaunchIntentForPackage("com.example.dariusz.second");
-        if (launchIntent != null) {
-            launchIntent.putExtra("contacts", allContacts);
-            startActivity(launchIntent);
-        } else {
-            Toast.makeText(getApplicationContext(), "nie uruchomiono", Toast.LENGTH_LONG).show();
-        }
+        Intent i = new Intent("android.intent.action.MAIN").putExtra("contacts", allContacts);
+
+        this.sendBroadcast(i);
+
 
     }
 
@@ -124,10 +121,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        viewContacts = (Button)findViewById(R.id.viewContacts);
-        contacts = (TextView)findViewById(R.id.contacts);
+        viewContacts = (Button) findViewById(R.id.viewContacts);
+        contacts = (TextView) findViewById(R.id.contacts);
 
-        if (shouldAskPermission()){
+        if (shouldAskPermission()) {
             askPermissions();
         }
 
@@ -138,14 +135,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
     }
 
     @Override
-    public void onRequestPermissionsResult(int permsRequestCode, String[] permissions, int[] grantResults){
-        switch(permsRequestCode){
+    public void onRequestPermissionsResult(int permsRequestCode, String[] permissions, int[] grantResults) {
+        switch (permsRequestCode) {
             case PERMISSIONS:
                 boolean readContactsAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                if (readContactsAccepted){
+                if (readContactsAccepted) {
                     viewContacts.setEnabled(true);
                 }
                 break;
